@@ -4,7 +4,7 @@ import { saveSession } from '../lib/session'
 import { CAT_COLORS } from '../lib/catSprites'
 import CatSprite from './CatSprite'
 
-const SWATCH_HEX = { ginger: '#F2A65A', gray: '#9AA0AE' }
+const SWATCH_HEX = { ginger: '#F2A65A', gray: '#D8C4A8' }
 
 export default function AuthScreen({ onAuthed }) {
   const [mode, setMode] = useState('login') // 'login' | 'signup'

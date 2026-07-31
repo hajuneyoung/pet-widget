@@ -5,7 +5,7 @@ drop table if exists public.users cascade;
 drop function if exists public.signup_user(text, text, text);
 drop function if exists public.login_user(text, text);
 
-create extension if not exists pgcrypto;
+create extension if not exists pgcrypto with schema extensions;
 
 -- 이름 + 비밀번호(해시)만 저장. 이메일 없음.
 create table if not exists public.users (
@@ -47,7 +47,7 @@ create or replace function public.signup_user(p_name text, p_password text, p_co
 returns uuid
 language plpgsql
 security definer
-set search_path = public
+set search_path = public, extensions
 as $$
 declare
   v_id uuid;
@@ -57,7 +57,7 @@ begin
   end if;
 
   insert into public.users (name, password_hash)
-  values (p_name, crypt(p_password, gen_salt('bf')))
+  values (p_name, extensions.crypt(p_password, extensions.gen_salt('bf')))
   returning id into v_id;
 
   insert into public.pets (user_id, display_name, color)
@@ -72,7 +72,7 @@ create or replace function public.login_user(p_name text, p_password text)
 returns uuid
 language plpgsql
 security definer
-set search_path = public
+set search_path = public, extensions
 as $$
 declare
   v_id uuid;
@@ -82,7 +82,7 @@ begin
   from public.users
   where name = p_name;
 
-  if v_id is null or v_hash <> crypt(p_password, v_hash) then
+  if v_id is null or v_hash <> extensions.crypt(p_password, v_hash) then
     raise exception '이름 또는 비밀번호가 틀렸어요';
   end if;
 
