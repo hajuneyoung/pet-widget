@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '../lib/supabaseClient'
+import { clearSession } from '../lib/session'
 import CatSprite from './CatSprite'
 import {
   applyRevisitDecay,
@@ -16,11 +17,11 @@ const STAT_META = [
   { key: 'energy', label: '체력', icon: '⚡' },
 ]
 
-export default function PetScreen({ onLogout }) {
+export default function PetScreen({ user, onLogout }) {
   const [pet, setPet] = useState(null)
   const [line, setLine] = useState('')
   const [loading, setLoading] = useState(true)
-  const [actionKey, setActionKey] = useState(null) // 버튼 누를때 살짝 애니메이션 트리거용
+  const [actionKey, setActionKey] = useState(null)
 
   useEffect(() => {
     loadPet()
@@ -28,8 +29,6 @@ export default function PetScreen({ onLogout }) {
 
   async function loadPet() {
     setLoading(true)
-    const { data: { user } } = await supabase.auth.getUser()
-    if (!user) return
 
     const { data, error } = await supabase
       .from('pets')
@@ -75,11 +74,11 @@ export default function PetScreen({ onLogout }) {
         happiness: updated.happiness,
         energy: updated.energy,
       })
-      .eq('user_id', updated.user_id)
+      .eq('user_id', user.id)
   }
 
-  async function handleLogout() {
-    await supabase.auth.signOut()
+  function handleLogout() {
+    clearSession()
     onLogout()
   }
 

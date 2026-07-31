@@ -1,20 +1,50 @@
-// 스프라이트 프레임을 자동으로 불러옵니다.
-// 경로 규칙: src/assets/cat/{color}/{action}-{frameIndex}.png
-const modules = import.meta.glob('../assets/cat/*/*.png', { eager: true, as: 'url' })
+import ginger_eat_0 from '../assets/cat/ginger/eat-0.png'
+import ginger_eat_1 from '../assets/cat/ginger/eat-1.png'
+import ginger_eat_2 from '../assets/cat/ginger/eat-2.png'
+import ginger_eat_3 from '../assets/cat/ginger/eat-3.png'
+import ginger_idle_0 from '../assets/cat/ginger/idle-0.png'
+import ginger_idle_1 from '../assets/cat/ginger/idle-1.png'
+import ginger_idle_2 from '../assets/cat/ginger/idle-2.png'
+import ginger_idle_3 from '../assets/cat/ginger/idle-3.png'
+import ginger_play_0 from '../assets/cat/ginger/play-0.png'
+import ginger_play_1 from '../assets/cat/ginger/play-1.png'
+import ginger_play_2 from '../assets/cat/ginger/play-2.png'
+import ginger_play_3 from '../assets/cat/ginger/play-3.png'
+import ginger_sleep_0 from '../assets/cat/ginger/sleep-0.png'
+import ginger_sleep_1 from '../assets/cat/ginger/sleep-1.png'
+import ginger_sleep_2 from '../assets/cat/ginger/sleep-2.png'
+import ginger_sleep_3 from '../assets/cat/ginger/sleep-3.png'
+import gray_eat_0 from '../assets/cat/gray/eat-0.png'
+import gray_eat_1 from '../assets/cat/gray/eat-1.png'
+import gray_eat_2 from '../assets/cat/gray/eat-2.png'
+import gray_eat_3 from '../assets/cat/gray/eat-3.png'
+import gray_idle_0 from '../assets/cat/gray/idle-0.png'
+import gray_idle_1 from '../assets/cat/gray/idle-1.png'
+import gray_idle_2 from '../assets/cat/gray/idle-2.png'
+import gray_idle_3 from '../assets/cat/gray/idle-3.png'
+import gray_play_0 from '../assets/cat/gray/play-0.png'
+import gray_play_1 from '../assets/cat/gray/play-1.png'
+import gray_play_2 from '../assets/cat/gray/play-2.png'
+import gray_play_3 from '../assets/cat/gray/play-3.png'
+import gray_sleep_0 from '../assets/cat/gray/sleep-0.png'
+import gray_sleep_1 from '../assets/cat/gray/sleep-1.png'
+import gray_sleep_2 from '../assets/cat/gray/sleep-2.png'
+import gray_sleep_3 from '../assets/cat/gray/sleep-3.png'
 
-const frames = {} // { ginger: { idle: [url,url,url,url], sleep: [...], eat: [...], play: [...] }, gray: {...} }
-
-for (const path in modules) {
-  const match = path.match(/cat\/([a-z]+)\/([a-z]+)-(\d+)\.png$/)
-  if (!match) continue
-  const [, color, action, indexStr] = match
-  const index = Number(indexStr)
-  frames[color] ??= {}
-  frames[color][action] ??= []
-  frames[color][action][index] = modules[path]
+export const CAT_SPRITE_FRAMES = {
+  ginger: {
+    eat: [ginger_eat_0, ginger_eat_1, ginger_eat_2, ginger_eat_3],
+    idle: [ginger_idle_0, ginger_idle_1, ginger_idle_2, ginger_idle_3],
+    play: [ginger_play_0, ginger_play_1, ginger_play_2, ginger_play_3],
+    sleep: [ginger_sleep_0, ginger_sleep_1, ginger_sleep_2, ginger_sleep_3],
+  },
+  gray: {
+    eat: [gray_eat_0, gray_eat_1, gray_eat_2, gray_eat_3],
+    idle: [gray_idle_0, gray_idle_1, gray_idle_2, gray_idle_3],
+    play: [gray_play_0, gray_play_1, gray_play_2, gray_play_3],
+    sleep: [gray_sleep_0, gray_sleep_1, gray_sleep_2, gray_sleep_3],
+  },
 }
-
-export const CAT_SPRITE_FRAMES = frames
 
 export const CAT_COLORS = {
   ginger: { label: '치즈' },

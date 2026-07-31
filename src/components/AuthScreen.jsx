@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { supabase, nameToEmail } from '../lib/supabaseClient'
+import { supabase } from '../lib/supabaseClient'
+import { saveSession } from '../lib/session'
 import { CAT_COLORS } from '../lib/catSprites'
 import CatSprite from './CatSprite'
 
@@ -16,47 +17,26 @@ export default function AuthScreen({ onAuthed }) {
   async function handleSubmit(e) {
     e.preventDefault()
     setError('')
-    if (!name.trim() || !password) {
+    const trimmedName = name.trim()
+    if (!trimmedName || !password) {
       setError('이름과 비밀번호를 입력해줘')
       return
     }
     setLoading(true)
-    const email = nameToEmail(name)
 
     try {
-      if (mode === 'signup') {
-        const { data, error: signUpError } = await supabase.auth.signUp({
-          email,
-          password,
-        })
-        if (signUpError) throw signUpError
+      const fn = mode === 'signup' ? 'signup_user' : 'login_user'
+      const args = mode === 'signup'
+        ? { p_name: trimmedName, p_password: password, p_color: color }
+        : { p_name: trimmedName, p_password: password }
 
-        // 회원가입 성공 시, 고양이 1마리 생성
-        const userId = data.user?.id
-        if (userId) {
-          const { error: insertError } = await supabase.from('pets').insert({
-            user_id: userId,
-            display_name: name.trim(),
-            color,
-            hunger: 80,
-            happiness: 80,
-            energy: 80,
-            last_visit: new Date().toISOString(),
-          })
-          if (insertError) throw insertError
-        }
-      } else {
-        const { error: signInError } = await supabase.auth.signInWithPassword({
-          email,
-          password,
-        })
-        if (signInError) throw signInError
-      }
+      const { data, error: rpcError } = await supabase.rpc(fn, args)
+      if (rpcError) throw rpcError
+
+      saveSession({ id: data, name: trimmedName })
       onAuthed()
     } catch (err) {
-      setError(err.message === 'Invalid login credentials'
-        ? '이름 또는 비밀번호가 틀렸어'
-        : err.message)
+      setError(err.message || '문제가 생겼어요, 다시 시도해줘')
     } finally {
       setLoading(false)
     }
@@ -93,7 +73,7 @@ export default function AuthScreen({ onAuthed }) {
             <input
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="닉네임"
+              placeholder="닉네임 (한글/영문 자유롭게)"
               autoComplete="username"
             />
           </label>

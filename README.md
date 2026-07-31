@@ -5,11 +5,11 @@ Tamagotchi 감성의 미니 웹 위젯. 이름+비밀번호로 로그인하면 �
 ## 1. Supabase 설정
 
 1. https://supabase.com 에서 프로젝트 생성
-2. SQL Editor에서 `supabase-schema.sql` 내용 실행 (테이블 + RLS 정책 생성)
-3. **Authentication > Providers > Email** 에서 "Confirm email" 옵션을 꺼주세요.
-   (이름 기반 로그인을 위해 내부적으로 `이름@pet.local` 형태의 가짜 이메일을 쓰기 때문에,
-   이메일 인증 메일이 실제로 발송/확인될 수 없어요.)
-4. Project Settings > API 에서 `Project URL`과 `anon public` 키 복사
+2. SQL Editor에서 `supabase-schema.sql` 내용을 **전체** 실행
+   (맨 위에 기존 테이블/함수를 지우는 `drop` 문이 포함되어 있어서, 이전에 이메일 기반으로
+   만들었던 테이블이 있어도 깨끗하게 다시 만들어져요)
+3. 이제 이메일을 전혀 안 써서 **"Confirm email" 설정은 신경 안 써도 됩니다.**
+4. Project Settings > API 에서 `Project URL`과 `anon public`(= Publishable key) 복사
 
 ## 2. 로컬 실행
 
@@ -23,9 +23,13 @@ npm run dev
 
 ## 3. 현재 구현된 것
 
-- 이름 + 비밀번호 회원가입/로그인
-- 고양이 색상 선택 (하양이 / 치즈 / 턱시도)
-- 케어 3종: 먹이주기 / 놀아주기 / 재우기
+- **이름 + 비밀번호만으로 회원가입/로그인** (이메일 전혀 사용 안 함).
+  Supabase Auth 대신 직접 만든 `signup_user` / `login_user` SQL 함수를 씀.
+  비밀번호는 `pgcrypto`로 해시해서 저장하고, 로그인 세션은 브라우저에 저장돼요.
+  ⚠️ 친구들끼리 쓰는 캐주얼 프로젝트라 정식 인증(비밀번호 재설정, 세션 만료 등)은
+  없어요 — 이름만 알면 로그인 시도는 가능한 구조이니 민감한 용도로는 쓰지 마세요.
+- 고양이 색상 선택 (치즈 / 그레이)
+- 케어 3종: 먹이주기 / 놀아주기 / 재우기 (실제 스프라이트 애니메이션)
 - 배고픔·기분·체력 게이지
 - 상태별 말풍선 대사 (예: 배고프면 "밥내놔 주인놈아")
 - 재접속 시 소량 상태 감소 (10분 쿨다운, 실시간 타이머 없음)

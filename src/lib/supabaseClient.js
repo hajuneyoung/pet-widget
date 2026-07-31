@@ -10,10 +10,3 @@ if (!supabaseUrl || !supabaseAnonKey) {
 }
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey)
-
-// 이름 기반 로그인을 위해 내부적으로 사용하는 가짜 이메일 도메인.
-// Supabase Auth는 이메일 기반이라, 이름을 이메일 형태로 변환해서 사용합니다.
-export function nameToEmail(name) {
-  const normalized = name.trim().toLowerCase().replace(/\s+/g, '')
-  return `${normalized}@pet.local`
-}
