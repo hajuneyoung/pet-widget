@@ -253,13 +253,39 @@ body {
 }
 
 .cat-stage {
+  position: relative;
   display: flex;
+  align-items: flex-end;
   justify-content: center;
-  padding: 6px 0 2px;
+  height: 150px;
+  overflow: hidden;
+  border-radius: 12px;
+  background: linear-gradient(to bottom, #CFE0D6 0%, #CFE0D6 62%, #B8CDB0 62%, #B8CDB0 100%);
+  padding: 6px 0 0;
 }
+
+.room-bg {
+  position: absolute;
+  inset: 0;
+}
+
+.room-item {
+  position: absolute;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  filter: drop-shadow(0 2px 0 rgba(43,58,44,0.12));
+}
+
+.room-tower { left: 4%; bottom: 38%; height: 92px; }
+.room-house { right: 4%; bottom: 34%; height: 62px; }
+.room-bed { left: 50%; bottom: 4px; height: 54px; transform: translateX(-50%); }
+.room-cushion { left: 8%; bottom: 6px; height: 26px; }
+.room-food { right: 26%; bottom: 6px; height: 30px; }
+.room-mouse { right: 6%; bottom: 6px; height: 26px; }
 
 .cat-sprite-wrap {
   position: relative;
+  z-index: 1;
   width: 176px;
   height: 132px;
   display: flex;

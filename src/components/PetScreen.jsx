@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { supabase } from '../lib/supabaseClient'
 import { clearSession } from '../lib/session'
 import CatSprite from './CatSprite'
+import RoomBackground from './RoomBackground'
 import {
   applyRevisitDecay,
   feed,
@@ -111,6 +112,7 @@ export default function PetScreen({ user, onLogout }) {
         <div className="speech-bubble">{line}</div>
 
         <div className={`cat-stage ${actionKey ? `action-${actionKey}` : ''}`}>
+          <RoomBackground />
           <CatSprite color={pet.color} mood={mood} action={actionKey} />
         </div>
 
